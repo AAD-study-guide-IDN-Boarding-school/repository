@@ -24,54 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         val userDataStoreManager = UserDataStoreManager(this)
 
-        viewModel = ViewModelProvider(
-            this,
-            MainViewModelFactory.getInstance(this, userDataStoreManager)
-        )[MainViewModel::class.java]
 
-        viewModel.getIdUser().observe(this) {
-            viewModel.userData(it)
-        }
-
-        viewModel.userData.observe(this) { user ->
-            when (user.status) {
-                Status.SUCCESS -> {
-                    if (user.data != null) {
-                        binding.txtUsername.text = user?.data.username
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            "User Tidak Ditemukan",
-                            Snackbar.LENGTH_LONG
-                        )
-                            .show()
-                    }
-                }
-                Status.ERROR -> {
-                    Toast.makeText(this, user.message, Toast.LENGTH_SHORT).show()
-                }
-                else -> {}
-            }
-        }
-        binding.btnLogout.setOnClickListener {
-            val dialog = AlertDialog.Builder(this)
-            dialog.setTitle("Logout")
-            dialog.setMessage("Apakah Anda Yakin Ingin Logout ?")
-            dialog.setPositiveButton("Yakin") { _, _ ->
-                Snackbar.make(binding.root, "User Berhasil Logout", Snackbar.LENGTH_LONG)
-                    .show()
-                viewModel.clearDataUser()
-                val intent = Intent(this, LoginActivity::class.java)
-                intent.flags =
-                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            }
-
-            dialog.setNegativeButton("Batal") { listener, _ ->
-                listener.dismiss()
-            }
-
-            dialog.show()
-        }
     }
 }

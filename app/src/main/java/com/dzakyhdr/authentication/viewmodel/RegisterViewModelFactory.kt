@@ -14,15 +14,4 @@ class RegisterViewModelFactory(private val repository: UserRepository) : ViewMod
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 
-    companion object {
-        @Volatile
-        private var instance: RegisterViewModelFactory? = null
-        fun getInstance(
-            context: Context
-        ): RegisterViewModelFactory =
-            instance ?: synchronized(this) {
-                instance ?: RegisterViewModelFactory(Injection.provideReposistory(context))
-            }.also { instance = it }
-    }
-
 }

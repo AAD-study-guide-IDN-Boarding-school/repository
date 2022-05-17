@@ -13,33 +13,4 @@ class MainViewModel(
 ) : ViewModel() {
 
 
-    private var _errorStatus = MutableLiveData<String?>()
-    val errorStatus: LiveData<String?> get() = _errorStatus
-
-    private var _userData = MutableLiveData<Resource<UserEntity>>()
-    val userData: LiveData<Resource<UserEntity>> get() = _userData
-
-
-
-
-    fun userData(id: Int) {
-        viewModelScope.launch {
-            try {
-                val data = repository.getUser(id)
-                _userData.postValue(Resource.success(data, 0))
-            } catch (exception: Exception) {
-                _userData.postValue(Resource.error(null, exception.message!!))
-            }
-        }
-    }
-
-    fun getIdUser(): LiveData<Int>{
-        return pref.getId().asLiveData()
-    }
-
-    fun clearDataUser() {
-        viewModelScope.launch {
-            pref.logoutUser()
-        }
-    }
 }

@@ -23,54 +23,12 @@ class LoginActivity : AppCompatActivity() {
         val userDataStoreManager = UserDataStoreManager(this)
 
 
-        viewModel = ViewModelProvider(
-            this,
-            LoginViewModelFactory.getInstance(this, userDataStoreManager)
-        )[LoginViewModel::class.java]
-
         binding.txtToLogin.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        viewModel.getStatus().observe(this){ status ->
-            if (status) {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags =
-                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            }
-        }
 
-        binding.btnLogin.setOnClickListener {
-            viewModel.login(
-                binding.edtUsername.text.toString(),
-                binding.edtPassword.text.toString()
-            )
-        }
 
-        viewModel.loginStatus.observe(this) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    if (it.data != null) {
-                        viewModel.saveUserDataStore(true, it.data.id)
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.flags =
-                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            "User Tidak Ditemukan",
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                    }
-                }
-                Status.ERROR -> {
-                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
-                }
-                else -> {}
-            }
-        }
     }
 
 }

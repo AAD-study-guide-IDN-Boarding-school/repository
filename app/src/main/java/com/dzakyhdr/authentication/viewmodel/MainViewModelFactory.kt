@@ -17,16 +17,5 @@ class MainViewModelFactory(private val repository: UserRepository,
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 
-    companion object {
-        @Volatile
-        private var instance: MainViewModelFactory? = null
-        fun getInstance(
-            context: Context,
-            userDataStoreManager: UserDataStoreManager
-        ): MainViewModelFactory =
-            instance ?: synchronized(this) {
-                instance ?: MainViewModelFactory(Injection.provideReposistory(context), userDataStoreManager)
-            }.also { instance = it }
-    }
 
 }

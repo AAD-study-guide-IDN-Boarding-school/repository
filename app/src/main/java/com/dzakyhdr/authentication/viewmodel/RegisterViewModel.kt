@@ -11,19 +11,5 @@ import kotlinx.coroutines.launch
 
 class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
 
-    private val _saved = MutableLiveData<Event<Boolean>>()
-    val saved: LiveData<Event<Boolean>> get() = _saved
-
-    fun insert(user: UserEntity) {
-        if (user.username.isEmpty() || user.password.isEmpty()) {
-            _saved.value = Event(false)
-        } else {
-            viewModelScope.launch {
-                repository.insert(user)
-            }
-            _saved.value = Event(true)
-        }
-
-    }
 
 }
